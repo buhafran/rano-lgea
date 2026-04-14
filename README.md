@@ -1,59 +1,301 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rano LGEA Education Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive Laravel + Filament-based system for managing schools, inventory, indicators, and student results for Rano Local Government Education Authority.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* School and staff management
+* Student enrollment and result processing
+* Inventory and facilities tracking
+* Indicator computation (GER, NER, PTR, etc.)
+* Census data import and approval workflow
+* Dashboard analytics and charts
+* Role-based access control (RBAC)
+* Public result checker portal
+* PDF reports and broadsheets
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🧱 Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* PHP 8.2+
+* Laravel 11
+* Filament Admin Panel (v5.5)
+* MySQL / PostgreSQL
+* TailwindCSS
+* Spatie Roles & Permissions
+* Laravel Queue सिस्टम
+* DomPDF (PDF generation)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## ⚙️ Installation
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone the repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/your-repo/rano-lgea-system.git
+cd rano-lgea-system
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+### 2. Install dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+npm install
+npm run build
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Environment setup
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Update `.env`:
 
-## License
+```env
+APP_NAME="Rano LGEA System"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://your-domain.com
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# rano-lgea
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=rano_lgea
+DB_USERNAME=root
+DB_PASSWORD=yourpassword
+```
+
+---
+
+### 4. Database setup
+
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+---
+
+### 5. Storage link
+
+```bash
+php artisan storage:link
+```
+
+---
+
+### 6. Install Filament
+
+```bash
+php artisan filament:install --panels
+```
+
+---
+
+### 7. Create admin user
+
+```bash
+php artisan make:filament-user
+```
+
+---
+
+## 🔐 Roles & Permissions
+
+Seed roles:
+
+```bash
+php artisan db:seed --class=RolePermissionSeeder
+```
+
+Assign role:
+
+```bash
+php artisan tinker
+```
+
+```php
+$user = App\Models\User::where('email', 'admin@example.com')->first();
+$user->assignRole('Super Admin');
+```
+
+---
+
+## 🧵 Queue Setup (IMPORTANT)
+
+Used for:
+
+* Census imports
+* Notifications
+
+### Create queue table
+
+```bash
+php artisan queue:table
+php artisan migrate
+```
+
+### Run queue worker
+
+```bash
+php artisan queue:work
+```
+
+For production (Supervisor recommended):
+
+```bash
+php artisan queue:work --daemon --tries=3
+```
+
+---
+
+## 🌐 Public Result Checker
+
+Accessible via:
+
+```
+/result-checker
+```
+
+Requires:
+
+* Admission Number
+* Academic Session
+* Term
+* Access Code (PIN)
+
+---
+
+## 📄 PDF Reports
+
+Generated using:
+
+* DomPDF
+* Broadsheets
+* Student report cards
+
+Ensure fonts are installed for proper rendering.
+
+---
+
+## 📡 Web Server Configuration
+
+### Apache
+
+Ensure:
+
+```apache
+DocumentRoot /public
+```
+
+Enable mod_rewrite.
+
+---
+
+### Nginx
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    root /var/www/rano-lgea/public;
+
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+```
+
+---
+
+## 🛠️ Optimization (Production)
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan optimize
+```
+
+---
+
+## 🔄 Deployment Checklist
+
+* [ ] Environment variables configured
+* [ ] Database migrated and seeded
+* [ ] Storage linked
+* [ ] Queue worker running
+* [ ] Admin user created
+* [ ] Roles assigned
+* [ ] HTTPS configured
+* [ ] APP_DEBUG=false
+
+---
+
+## 🧪 Troubleshooting
+
+### Login not working
+
+* Check `canAccessPanel()` in User model
+* Ensure user has a role
+
+### Blank page / 500 error
+
+```bash
+php artisan optimize:clear
+```
+
+### Queue not working
+
+```bash
+php artisan queue:work
+```
+
+---
+
+## 🔐 Security Notes
+
+* Never expose `.env`
+* Always use HTTPS
+* Restrict `/admin` access if needed
+* Use strong passwords
+
+---
+
+## 📈 Future Improvements
+
+* Mobile app integration (API)
+* SMS gateway integration
+* Advanced analytics dashboard
+* Parent mobile portal
+
+---
+
+## 👨‍💻 Author
+
+Developed for Rano LGEA Education Authority
+
+---
+
+## 📄 License
+
+This project is proprietary software for government use.
