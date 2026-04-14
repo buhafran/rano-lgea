@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Filament\Resources\Wards\Schemas;
+
+use Filament\Schemas\Schema;
+
+class WardForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                //
+            ]);
+    }
+}
